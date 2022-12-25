@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class ExperienceType extends Model
 {
     use HasFactory;
+
+    public function job()
+    {
+        return $this->hasMany(Job::class, 'experience_id', 'id');
+    }
 }
