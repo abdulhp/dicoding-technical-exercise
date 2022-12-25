@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('job_location')->nullable();
             $table->text('description');
             $table->text('job_responsibilities');
+            $table->text('job_requirements');
             $table->text('closing_statement');
 
             $table->foreignId('company_id');
