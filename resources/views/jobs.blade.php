@@ -7,13 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dicoding | Jobs</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" type="image/png" href="{{asset('assets/image/favicon.png')}}">
     @vite('resources/css/app.css')
 </head>
 
 <body class="flex flex-col min-h-screen font-inter bg-zinc-900">
     <nav class="flex flex-row justify-between w-full h-[70px] text-white bg-zinc-900 px-10 align-middle">
         <div id="nav-left" class="flex flex-row my-auto gap-x-8">
-            <img src="{{ asset('assets/image/logo.png') }}" alt="Dicoding Jobs" class="w-[179px] h-[32px]"> |
+            <img src="{{ asset('assets/image/logo-dark-theme.png') }}" alt="Dicoding Jobs" class="w-[179px] h-[32px]"> |
             <ul class="flex flex-row list-none gap-x-5">
                 <li>Looking for job</li>
                 <li>Hiring</li>
@@ -32,35 +33,32 @@
         <section id="body" class="flex flex-row bg-white rounded-t-2xl px-28 w-full gap-x-5 justify-start">
             <div id="content" class="my-10 flex flex-col flex-none w-2/3">
                 <h1 class="text-xl font-bold mb-5">Daftar Pekerjaan Terbaru</h1>
-                {{-- <div class="w-full flex justify-start items-center relative">
-                <i class="absolute m-5 w-10 bx bx-search" alt="Search Icon"></i>
-                <input
-                placeholder="Pekerjaan apa yang sedang anda cari ?"
-                class="border border-zinc-200 p-4 pl-10 w-full"
-                />
-            </div> --}}
-                @for ($i = 0; $i < 10; $i++)
-                    <div id="card-{{ $i }}"
+                @foreach ($listJobs as $index => $job)
+                <a href="{{url('jobs/'.$job->id.'/show')}}">
+                    <div id="card-{{ $index }}"
                         class="flex flex-row w-full my-2 items-center gap-x-5 border border-zinc-200 p-5 text-sm">
-                        <img src="{{ asset('assets/image/example-joblist.png') }}" alt="Job Image" class="h-24 w-24">
+                        <img src="{{ asset('assets/image/'.$job->company->image) }}" alt="Job Image" class="h-24 w-24">
                         <div id="card-body" class="flex flex-col justify-between w-full">
-                            <h5 class="font-bold text-lg">Job Position</h5>
+                            <h5 class="font-bold text-lg">{{$job->name}}</h5>
                             <div id="card-info" class="flex flex-row w-full justify-between">
                                 <div class="flex flex-col">
-                                    <p><i class="bx bx-buildings"></i> Company</p>
+                                    <p><i class="bx bx-buildings"></i> {{$job->company->name}}</p>
                                     <div class="flex flex-row gap-5">
-                                        <p><i class="bx bx-map"></i> Information 1</p>
-                                        <p><i class="bx bx-briefcase"></i> Information 2</p>
+                                        <p><i class="bx bx-map"></i> {{$job->job_location}}</p>
+                                        <p><i class="bx bx-briefcase"></i> {{$job->experience_type->experience}}</p>
                                     </div>
                                 </div>
                                 <div class="flex flex-col text-right">
-                                    <p>Dibuat pada 15 Juni 2022</p>
-                                    <p>Lamar Sebelum 15 Juni 2022</p>
+                                    <p>Dibuat pada {{\Carbon\Carbon::create($job->create_at)->format("d F Y")}}</p>
+                                    <p>Lamar Sebelum {{\Carbon\Carbon::create($job->closed_date)->format("d F Y")}}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                @endfor
+                @endforeach
+                </a>
+                <div id="pagination">
+                </div>
             </div>
             <aside class="flex flex-initial w-full flex-col my-10 gap-y-5">
                 <div class="w-full flex justify-start items-center relative">
@@ -71,15 +69,15 @@
                 <div class="flex flex-col gap-y-5">
                     <div id="filter-card" class="flex flex-col p-5 border border-zinc-200 gap-y-2">
                         <h1 class="font-bold text-lg">Keahlian</h1>
-                        @foreach (['Back-End Developer', 'Front-End Developer', 'Product Manager', 'Product Designer', 'iOS Developer'] as $index => $item)
+                        @foreach ($listSkills as $index => $skill)
                             <div class="form-check text-zinc-500">
                                 <input
                                     class="form-check-input h-4 w-4 border border-gray-300 rounded-sm mt-1 align-top float-left mr-2"
-                                    type="checkbox" value="{{ $item }}" name="skill"
+                                    type="checkbox" value="{{ $skill->skill }}" name="skill"
                                     id="skill-check-{{ $index }}">
                                 <label class="form-check-label inline-block text-gray-800"
                                     for="skill-check-{{ $index }}">
-                                    {{ $item }}
+                                    {{ $skill->skill }}
                                 </label>
                             </div>
                         @endforeach
@@ -87,15 +85,15 @@
                     </div>
                     <div id="filter-card" class="flex flex-col p-5 border border-zinc-200 gap-y-2">
                         <h1 class="font-bold text-lg">Tipe Pekerjaan</h1>
-                        @foreach (['Full-time', 'Freelance', 'Intern', 'Bisa Remote'] as $index => $item)
+                        @foreach ($listJobTypes as $index => $JobType)
                             <div class="form-check text-zinc-500">
                                 <input
                                     class="form-check-input h-4 w-4 border border-gray-300 rounded-sm mt-1 align-top float-left mr-2"
-                                    type="checkbox" value="{{ $item }}" name="work_type"
+                                    type="checkbox" value="{{ $JobType->type }}" name="work_type"
                                     id="work-type-check-{{ $index }}">
                                 <label class="form-check-label inline-block text-gray-800"
                                     for="work-type-check-{{ $index }}">
-                                    {{ $item }}
+                                    {{ $JobType->type }}
                                 </label>
                             </div>
                         @endforeach
@@ -104,15 +102,15 @@
                     </div>
                     <div id="filter-card" class="flex flex-col p-5 border border-zinc-200 gap-y-2">
                         <h1 class="font-bold text-lg">Kota</h1>
-                        @foreach (['Bandung', 'Jakarta', 'Yogyakarta'] as $index => $item)
+                        @foreach ($listLocations as $index => $location)
                             <div class="form-check text-zinc-500">
                                 <input
                                     class="form-check-input h-4 w-4 border border-gray-300 rounded-sm mt-1 align-top float-left mr-2"
-                                    type="checkbox" value="{{ $item }}" name="location"
+                                    type="checkbox" value="{{ $location['city_name'] }}" name="location"
                                     id="location-check-{{ $index }}">
                                 <label class="form-check-label inline-block text-gray-800"
                                     for="location-check-{{ $index }}">
-                                    {{ $item }}
+                                    {{ $location['city_name'] }}
                                 </label>
                             </div>
                         @endforeach
@@ -121,15 +119,15 @@
                     </div>
                     <div id="filter-card" class="flex flex-col p-5 border border-zinc-200 gap-y-2">
                         <h1 class="font-bold text-lg">Pengalaman</h1>
-                        @foreach (['Freshgraduate', '1-3 tahun', '3-5 tahun', '5-10 tahun', 'Lebih dari 10 tahun'] as $index => $item)
+                        @foreach ($listExperienceTypes as $index => $experienceType)
                             <div class="form-check text-zinc-500">
                                 <input
                                     class="form-check-input h-4 w-4 border border-gray-300 rounded-sm mt-1 align-top float-left mr-2"
-                                    type="checkbox" value="{{ $item }}" name="work_experience"
+                                    type="checkbox" value="{{ $experienceType->experience }}" name="work_experience"
                                     id="work-experience-check-{{ $index }}">
                                 <label class="form-check-label inline-block text-gray-800"
                                     for="work-experience-check-{{ $index }}">
-                                    {{ $item }}
+                                    {{ $experienceType->experience }}
                                 </label>
                             </div>
                         @endforeach

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,9 +15,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // return view('welcome');
+    return redirect(url('/jobs'));
 });
 
-Route::get('/jobs', function() {
-    return view('jobs');
+Route::group(['prefix' => 'jobs', 'as' => 'job'], function() {
+    Route::get('/', [JobController::class, 'index'])->name('index');
+    Route::get('/{job}/show', [JobController::class, 'show'])->name('show');
 });
+
+
+
