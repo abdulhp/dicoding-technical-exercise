@@ -14,7 +14,7 @@
 <body class="flex flex-col min-h-screen font-inter">
     <nav class="flex flex-row justify-between w-full h-[70px] px-10 align-middle">
         <div id="nav-left" class="flex flex-row my-auto gap-x-8">
-            <img src="{{ asset('assets/image/logo-light-theme.png') }}" alt="Dicoding Jobs" class="w-[179px] h-[32px]"> |
+            <a href="{{ url('/jobs') }}"><img src="{{ asset('assets/image/logo-light-theme.png') }}" alt="Dicoding Jobs" class="w-[179px] h-[32px]"></a> |
             <ul class="flex flex-row list-none gap-x-5">
                 <li>Looking for job</li>
                 <li>Hiring</li>
@@ -45,7 +45,7 @@
                 <div id="action-button" class="flex flex-row justify-self-end gap-x-5 h-fit">
                     <button><i class='bx bx-share-alt text-2xl'></i></button>
                     <button><i class='bx bx-heart text-2xl'></i></button>
-                    <button class="bg-zinc-900 text-white px-5 py-2 rounded">Kirim lamaran</button>
+                    <a href="{{ url('jobs/'.$job->id.'/apply') }}" class="bg-zinc-900 text-white px-5 py-2 rounded">Kirim lamaran</a>
                 </div>
             </div>
         </section>

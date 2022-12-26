@@ -22,6 +22,8 @@ Route::get('/', function () {
 Route::group(['prefix' => 'jobs', 'as' => 'job'], function() {
     Route::get('/', [JobController::class, 'index'])->name('index');
     Route::get('/{job}/show', [JobController::class, 'show'])->name('show');
+    Route::get('/{job}/apply', [JobController::class, 'apply'])->name('apply');
+    Route::post('/{job}/apply', [JobController::class, 'store_applicant'])->name('store_applicant');
 });
 
 

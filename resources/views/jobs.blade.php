@@ -14,7 +14,7 @@
 <body class="flex flex-col min-h-screen font-inter bg-zinc-900">
     <nav class="flex flex-row justify-between w-full h-[70px] text-white bg-zinc-900 px-10 align-middle">
         <div id="nav-left" class="flex flex-row my-auto gap-x-8">
-            <img src="{{ asset('assets/image/logo-dark-theme.png') }}" alt="Dicoding Jobs" class="w-[179px] h-[32px]"> |
+            <a href="{{ url('/jobs') }}"><img src="{{ asset('assets/image/logo-dark-theme.png') }}" alt="Dicoding Jobs" class="w-[179px] h-[32px]"></a> |
             <ul class="flex flex-row list-none gap-x-5">
                 <li>Looking for job</li>
                 <li>Hiring</li>
