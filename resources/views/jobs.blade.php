@@ -20,8 +20,8 @@
                 <li>Hiring</li>
             </ul>
         </div>
-        <div id="nav-right" class="my-auto gap-x-5 flex flex-row">
-            <button><i class="bx bx-bell text-2xl"></i></button>
+        <div id="nav-right" class="flex flex-row my-auto gap-x-5">
+            <button><i class="text-2xl bx bx-bell"></i></button>
         </div>
     </nav>
 
@@ -30,17 +30,17 @@
             <p class="text-[#3B82F6] font-bold">Dicoding Jobs</p>
             <h1 class="text-2xl font-bold text-white">Temukan lowongan yang<br> cocok untuk anda. </h1>
         </section>
-        <section id="body" class="flex flex-row bg-white rounded-t-2xl px-28 w-full gap-x-5 justify-start">
-            <div id="content" class="my-10 flex flex-col flex-none w-2/3">
-                <h1 class="text-xl font-bold mb-5">Daftar Pekerjaan Terbaru</h1>
+        <section id="body" class="flex flex-row justify-start w-full bg-white rounded-t-2xl px-28 gap-x-5">
+            <div id="content" class="flex flex-col flex-none w-2/3 my-10">
+                <h1 class="mb-5 text-xl font-bold">Daftar Pekerjaan Terbaru</h1>
                 @foreach ($listJobs as $index => $job)
                 <a href="{{url('jobs/'.$job->id.'/show')}}">
                     <div id="card-{{ $index }}"
-                        class="flex flex-row w-full my-2 items-center gap-x-5 border border-zinc-200 p-5 text-sm">
-                        <img src="{{ asset('assets/image/'.$job->company->image) }}" alt="Job Image" class="h-24 w-24">
+                        class="flex flex-row items-center w-full p-5 my-2 text-sm border gap-x-5 border-zinc-200">
+                        <img src="{{ asset('assets/image/'.$job->company->image) }}" alt="Job Image" class="w-24 h-24">
                         <div id="card-body" class="flex flex-col justify-between w-full">
-                            <h5 class="font-bold text-lg">{{$job->name}}</h5>
-                            <div id="card-info" class="flex flex-row w-full justify-between">
+                            <h5 class="text-lg font-bold">{{$job->name}}</h5>
+                            <div id="card-info" class="flex flex-row justify-between w-full">
                                 <div class="flex flex-col">
                                     <p><i class="bx bx-buildings"></i> {{$job->company->name}}</p>
                                     <div class="flex flex-row gap-5">
@@ -60,83 +60,83 @@
                 <div id="pagination">
                 </div>
             </div>
-            <aside class="flex flex-initial w-full flex-col my-10 gap-y-5">
-                <div class="w-full flex justify-start items-center relative">
-                    <i class="absolute m-5 w-10 bx bx-search" alt="Search Icon"></i>
-                    <input placeholder="Pekerjaan apa yang sedang anda cari ?"
-                        class="border border-zinc-200 p-4 pl-10 w-full" />
-                </div>
-                <div class="flex flex-col gap-y-5">
-                    <div id="filter-card" class="flex flex-col p-5 border border-zinc-200 gap-y-2">
-                        <h1 class="font-bold text-lg">Keahlian</h1>
-                        @foreach ($listSkills as $index => $skill)
-                            <div class="form-check text-zinc-500">
-                                <input
-                                    class="form-check-input h-4 w-4 border border-gray-300 rounded-sm mt-1 align-top float-left mr-2"
-                                    type="checkbox" value="{{ $skill->skill }}" name="skill"
-                                    id="skill-check-{{ $index }}">
-                                <label class="form-check-label inline-block text-gray-800"
-                                    for="skill-check-{{ $index }}">
-                                    {{ $skill->skill }}
-                                </label>
-                            </div>
-                        @endforeach
-                        <p class="text-sm text-center w-full text-zinc-500">Selengkapnya <i class="bx bx-plus"></i></p>
+            <aside class="flex flex-col flex-initial w-full my-10 gap-y-5">
+                <form action="" id="job-filter" method="GET">
+                    <div class="relative flex items-center justify-start w-full">
+                        <i class="absolute w-10 m-5 bx bx-search" alt="Search Icon"></i>
+                        <input placeholder="Pekerjaan apa yang sedang anda cari ?"
+                            class="w-full p-4 pl-10 border border-zinc-200" id="job-search" name="job_name_search" value="{{app('request')->input('job_name_search')}}"/>
                     </div>
-                    <div id="filter-card" class="flex flex-col p-5 border border-zinc-200 gap-y-2">
-                        <h1 class="font-bold text-lg">Tipe Pekerjaan</h1>
-                        @foreach ($listJobTypes as $index => $JobType)
-                            <div class="form-check text-zinc-500">
-                                <input
-                                    class="form-check-input h-4 w-4 border border-gray-300 rounded-sm mt-1 align-top float-left mr-2"
-                                    type="checkbox" value="{{ $JobType->type }}" name="work_type"
-                                    id="work-type-check-{{ $index }}">
-                                <label class="form-check-label inline-block text-gray-800"
-                                    for="work-type-check-{{ $index }}">
-                                    {{ $JobType->type }}
-                                </label>
-                            </div>
-                        @endforeach
-                        <p class="text-sm text-center w-full text-zinc-500">Selengkapnya <i class="bx bx-plus"></i>
-                        </p>
+                    <div class="flex flex-col gap-y-5">
+                        <div id="filter-card" class="flex flex-col p-5 border border-zinc-200 gap-y-2">
+                            <h1 class="text-lg font-bold">Keahlian</h1>
+                            @foreach ($listSkills as $index => $skill)
+                                <div class="form-check text-zinc-500">
+                                    <input
+                                        class="float-left w-4 h-4 mt-1 mr-2 align-top border border-gray-300 rounded-sm form-check-input"
+                                        type="checkbox" value="{{ $skill->skill }}" name="skill"
+                                        id="skill-check-{{ $index }}" @if(app('request')->has('skill') && app('request')->input('skill') == $skill->skill) @checked(true) @endif>
+                                    <label class="inline-block text-gray-800 form-check-label"
+                                        for="skill-check-{{ $index }}">
+                                        {{ $skill->skill }}
+                                    </label>
+                                </div>
+                            @endforeach
+                            <p class="w-full text-sm text-center text-zinc-500">Selengkapnya <i class="bx bx-plus"></i></p>
+                        </div>
+                        <div id="filter-card" class="flex flex-col p-5 border border-zinc-200 gap-y-2">
+                            <h1 class="text-lg font-bold">Tipe Pekerjaan</h1>
+                            @foreach ($listJobTypes as $index => $JobType)
+                                <div class="form-check text-zinc-500">
+                                    <input
+                                        class="float-left w-4 h-4 mt-1 mr-2 align-top border border-gray-300 rounded-sm form-check-input"
+                                        type="checkbox" value="{{ $JobType->type }}" name="work_type"
+                                        id="work-type-check-{{ $index }}" @if(app('request')->has('work_type') && app('request')->input('work_type') == $JobType->type) @checked(true) @endif>
+                                    <label class="inline-block text-gray-800 form-check-label"
+                                        for="work-type-check-{{ $index }}">
+                                        {{ $JobType->type }}
+                                    </label>
+                                </div>
+                            @endforeach
+                            <p class="w-full text-sm text-center text-zinc-500">Selengkapnya <i class="bx bx-plus"></i>
+                            </p>
+                        </div>
+                        <div id="filter-card" class="flex flex-col p-5 border border-zinc-200 gap-y-2">
+                            <h1 class="text-lg font-bold">Kota</h1>
+                            @foreach ($listLocations as $index => $location)
+                                <div class="form-check text-zinc-500">
+                                    <input
+                                        class="float-left w-4 h-4 mt-1 mr-2 align-top border border-gray-300 rounded-sm form-check-input"
+                                        type="checkbox" value="{{ $location['city_name'] }}" name="location"
+                                        id="location-check-{{ $index }}" @if(app('request')->has('location') && app('request')->input('location') == $location['city_name']) @checked(true) @endif>
+                                    <label class="inline-block text-gray-800 form-check-label"
+                                        for="location-check-{{ $index }}">
+                                        {{ $location['city_name'] }}
+                                    </label>
+                                </div>
+                            @endforeach
+                            <p class="w-full text-sm text-center text-zinc-500">Selengkapnya <i class="bx bx-plus"></i>
+                            </p>
+                        </div>
+                        <div id="filter-card" class="flex flex-col p-5 border border-zinc-200 gap-y-2">
+                            <h1 class="text-lg font-bold">Pengalaman</h1>
+                            @foreach ($listExperienceTypes as $index => $experienceType)
+                                <div class="form-check text-zinc-500">
+                                    <input
+                                        class="float-left w-4 h-4 mt-1 mr-2 align-top border border-gray-300 rounded-sm form-check-input"
+                                        type="checkbox" value="{{ $experienceType->experience }}" name="work_experience"
+                                        id="work-experience-check-{{ $index }}" @if(app('request')->has('work_experience') && app('request')->input('work_experience') == $experienceType->experience) @checked(true) @endif>
+                                    <label class="inline-block text-gray-800 form-check-label"
+                                        for="work-experience-check-{{ $index }}">
+                                        {{ $experienceType->experience }}
+                                    </label>
+                                </div>
+                            @endforeach
+                            <p class="w-full text-sm text-center text-zinc-500">Selengkapnya <i class="bx bx-plus"></i>
+                            </p>
+                        </div>
                     </div>
-                    <div id="filter-card" class="flex flex-col p-5 border border-zinc-200 gap-y-2">
-                        <h1 class="font-bold text-lg">Kota</h1>
-                        @foreach ($listLocations as $index => $location)
-                            <div class="form-check text-zinc-500">
-                                <input
-                                    class="form-check-input h-4 w-4 border border-gray-300 rounded-sm mt-1 align-top float-left mr-2"
-                                    type="checkbox" value="{{ $location['city_name'] }}" name="location"
-                                    id="location-check-{{ $index }}">
-                                <label class="form-check-label inline-block text-gray-800"
-                                    for="location-check-{{ $index }}">
-                                    {{ $location['city_name'] }}
-                                </label>
-                            </div>
-                        @endforeach
-                        <p class="text-sm text-center w-full text-zinc-500">Selengkapnya <i class="bx bx-plus"></i>
-                        </p>
-                    </div>
-                    <div id="filter-card" class="flex flex-col p-5 border border-zinc-200 gap-y-2">
-                        <h1 class="font-bold text-lg">Pengalaman</h1>
-                        @foreach ($listExperienceTypes as $index => $experienceType)
-                            <div class="form-check text-zinc-500">
-                                <input
-                                    class="form-check-input h-4 w-4 border border-gray-300 rounded-sm mt-1 align-top float-left mr-2"
-                                    type="checkbox" value="{{ $experienceType->experience }}" name="work_experience"
-                                    id="work-experience-check-{{ $index }}">
-                                <label class="form-check-label inline-block text-gray-800"
-                                    for="work-experience-check-{{ $index }}">
-                                    {{ $experienceType->experience }}
-                                </label>
-                            </div>
-                        @endforeach
-                        <p class="text-sm text-center w-full text-zinc-500">Selengkapnya <i class="bx bx-plus"></i>
-                        </p>
-                    </div>
-                </div>
-
-                {{-- Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus consequuntur itaque quidem vel sunt facere quis iusto ad consequatur enim officiis, explicabo modi labore, quod, voluptatibus incidunt veniam a ipsa! --}}
+                </form>
             </aside>
         </section>
     </main>
@@ -177,5 +177,15 @@
         </div>
     </footer>
 </body>
+
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function() {
+        const form = $('#job-filter');
+        $('#job-search, [name=skill], [name=work_type], [name=location], [name=work_experience]').on('change', function() {
+            form.submit();
+        });
+    });
+</script>
 
 </html>

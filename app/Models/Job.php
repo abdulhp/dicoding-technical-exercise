@@ -38,4 +38,14 @@ class Job extends Model
     {
         return $this->belongsTo(JobType::class, 'job_type_id', 'id');
     }
+
+    /**
+     * Get all of the JobSkill for the Job
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function job_skill()
+    {
+        return $this->hasMany(JobSkill::class, 'job_id', 'id');
+    }
 }

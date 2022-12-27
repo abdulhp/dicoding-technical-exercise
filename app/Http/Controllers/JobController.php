@@ -19,7 +19,39 @@ class JobController extends Controller
         $listSkills = Skill::all();
         $listJobTypes = JobType::all();
         $listExperienceTypes = ExperienceType::all();
-        $listJobs = Job::all();
+        $listJobs = Job::with('company');
+
+        if($request->has('job_name_search')) {
+            $listJobs->whereRaw("lower(name) like '%".$request->input('job_name_search')."%'");
+        }
+        // [name=skill], [name=work_type], [name=location], [name=work_experience]
+
+        if($request->has('skill')){
+            $listJobs->whereHas('job_skill', function($q) use($request) {
+                $q->whereHas('skill', function($q2) use($request) {
+                    $q2->where('skill', $request->input('skill'));
+                });
+            });
+        }
+
+        if($request->has('work_type')){
+            $listJobs->whereHas('job_type', function($q) use($request) {
+                $q->where('type', $request->input('work_type'));
+            });
+        }
+
+        if($request->has('location')){
+            $listJobs->where('job_location', $request->input('location'));
+        }
+
+        if($request->has('work_experience')){
+            $listJobs->whereHas('experience_type', function($q) use($request) {
+                $q->where('experience', $request->input('work_experience'));
+            });
+        }
+
+        $listJobs = $listJobs->get();
+
         $listLocations = collect(RajaOngkir::getCity())->whereIn('city_name', $listJobs->pluck('job_location'))->take(5);
 
 
